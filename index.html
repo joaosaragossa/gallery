@@ -1,0 +1,360 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Galeria de imagens</title>
+    <script src="jquery-1.11.1.min.js"></script>
+    <style type="text/css" media="screen">
+
+
+      *, 
+      *:before, 
+      *:after 
+      {
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+      }
+
+      body
+      {
+        background: -webkit-radial-gradient(#fff, #999);
+        background: -o-radial-gradient(#fff, #999);
+        background: -moz-radial-gradient(#fff, #999);
+        background: radial-gradient(#fff, #999);
+        background-color: #eee;
+      }
+
+      header
+      {
+        text-align: center;
+      }
+
+      h1
+      {
+        border-bottom: 5px solid #999;
+        color: #222;
+        display: inline-block;
+        font-size: 5vw;
+      }
+      
+      ul, li
+      {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      main
+      {
+        margin: 0 auto;
+        max-width: 60em;
+        padding-bottom: 60px;
+      }
+
+      .gallery
+      {
+        /*background-image: url('bg.jpg');
+        background-size: 15%;*/
+        background-color: #333 /*rgb(84, 147, 9)*/;
+        border-radius: 0.5em;
+        /*box-shadow: 0 0 15px #000;*/
+        max-height: 500px;
+        position: relative;
+        width: 100%;
+      }
+
+      .gallery:before
+      {
+        background-color: #333 /*rgb(84, 147, 9)*/;
+        border-radius: 0.5em 0 0 0;
+        content: "";
+        height: 15px;
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: 20%;
+        z-index: 3;
+      }
+
+      .gallery:after
+      {
+        background-color: #333 /*rgb(84, 147, 9)*/;
+        border-radius: 0 0 0 0.5em;
+        bottom: 0;
+        content: "";
+        height: 15px;
+        left: 0;
+        position: absolute;
+        width: 20%;
+        z-index: 3;
+      }
+
+      .album-list-wrapper
+      {
+        float: left;
+        position: relative;
+      }
+
+      .album-list
+      {
+        /*background-color: #333;*/
+        float: left;
+        margin: 11px 0;
+        max-height: 470px;
+        overflow: hidden;
+        position: relative;
+        width: 20%;
+      }
+
+      .album-list li
+      {
+        padding: 5px 15px;
+        position: relative;
+      }
+
+      .album-pic
+      {
+        box-shadow: 1px 1px 0 rgba(255, 255, 255, 0.2), -1px -1px 0 rgba(0, 0, 0, 0.5);
+        border-radius: 2px;
+        cursor: pointer;
+        max-width: 100%;
+        width: 100%;
+      }
+
+      .album-caption
+      {
+        color: #fff;
+        font: 1vw sans-serif;
+        left: 0;
+        position: absolute;
+        text-align: center;
+        text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.5);
+        top: 40%;
+        width: 100%;
+      }
+
+      .album-list-nav
+      {
+        background-color: transparent;
+        cursor: pointer;
+        margin: 0;
+        height: 0;
+        outline: none;
+        padding: 0;
+        position: absolute;
+        width: 0;
+        z-index: 4;
+      }
+
+      .up
+      {
+        border: 1.5vw solid transparent;
+        border-bottom: 1.5vw solid rgb(255, 255, 255);
+        left: 7%;
+        opacity: 0.8;
+        top: 0;
+      }
+
+      .down
+      {
+        border: 1.5vw solid transparent;
+        border-top: 1.5vw solid rgb(255, 255, 255);
+        left: 7%;
+        opacity: 0.8;
+        bottom: 0;
+      }
+
+      .left
+      {
+        border: 1vw solid transparent;
+        border-right: 1vw solid rgb(255, 255, 255);
+        opacity: 0.8;
+        left: 20%;
+        top: 8%;
+      }
+
+      .right
+      {
+        border: 1vw solid transparent;
+        border-left: 1vw solid rgb(255, 255, 255);
+        opacity: 0.8;
+        right: 15px;
+        top: 8%;
+      }
+
+      .off
+      {
+        cursor: default;
+        opacity: 0.2;
+      }
+
+      .thumbnail-list
+      {
+        background-color: transparent;
+        float: right;
+        height: 20%;
+        overflow: hidden;
+        white-space: nowrap;
+        padding: 15px 60px 15px 5px;
+        position: absolute;
+        right: 15px;
+        top: 0;
+        width: 77%;
+        z-index: 2;
+      }
+
+      .thumbnail-list:before
+      {
+        background-color: transparent;
+        content: "";
+        height: 100%;
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: 15px;
+      }
+
+      .thumbnail-list:after
+      {
+        background-color: transparent;
+        content: "";
+        height: 100%;
+        position: relative;
+        right: 0;
+        top: 0;
+        width: 15px;
+      }
+
+      .thumbnail
+      {
+        border-radius: 2px;
+        box-shadow: 0 0 10px #000;
+        cursor: pointer;
+        margin-right: 10px;
+        opacity: 0.5;
+        height: 100%;
+        width: 15%;
+
+        transition: opacity 0.5s;
+      }
+
+      .thumbnail-active
+      {
+        opacity: 1;
+
+        transition: opacity 0.5s;
+      }
+
+      .thumbnail:hover
+      {
+        opacity: 1;
+
+        transition: opacity 0.5s;
+      }
+
+      .active-pic
+      {
+        background-color: #ccc;
+        background-size: cover;
+        border-radius: 0 0.5em 0.5em 0;
+        box-shadow: 0 0 3em #000 inset;
+        float: right;
+        height: 100%;
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 80%;
+        z-index: 1;
+      }
+
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Galeria</h1>
+    </header>
+    <main>
+      <div class="gallery">
+        <div class="album-list-wrapper">
+          <ul class="album-list">
+            <li>
+              <img class="album-pic" src="album01-pic01.jpg" alt="album01-pic01">
+              <span class="album-caption">legenda álbum 1</span>
+            </li>
+            <li>
+              <img class="album-pic" src="album02-pic01.jpg" alt="album02-pic01">
+              <span class="album-caption">legenda álbum 2</span>
+            </li>
+            <li>
+              <img class="album-pic" src="album03-pic01.jpg" alt="album03-pic01">
+              <span class="album-caption">legenda álbum 3</span>
+            </li>
+            <li>
+              <img class="album-pic" src="album04-pic01.jpg" alt="album04-pic01">
+              <span class="album-caption">legenda álbum 4</span>
+            </li>
+            <li>
+              <img class="album-pic" src="album05-pic01.jpg" alt="album05-pic01">
+              <span class="album-caption">legenda álbum 5</span>
+            </li>
+          </ul>
+          <button class="album-list-nav up"></button>
+          <button class="album-list-nav down"></button>
+        </div>
+        <div class="thumbnail-list">
+            <img class="thumbnail thumbnail-active" src="album01-pic01.jpg" alt="album01-pic01">
+            <img class="thumbnail" src="album01-pic02.jpg" alt="album01-pic02">
+            <img class="thumbnail" src="album01-pic03.jpg" alt="album01-pic03">
+            <img class="thumbnail" src="album01-pic04.jpg" alt="album01-pic03">
+            <img class="thumbnail" src="album01-pic05.jpg" alt="album01-pic03">
+            <img class="thumbnail" src="album01-pic06.jpg" alt="album01-pic03">
+            <img class="thumbnail" src="album01-pic07.jpg" alt="album01-pic03">
+        </div>
+        <button class="album-list-nav left"></button>
+        <button class="album-list-nav right"></button>
+        <div class="active-pic" style="background-image: url('album01-pic01.jpg')">
+        </div>
+        <div style="clear:both"></div>
+      </div>
+    </main>
+    <script type="text/javascript">
+
+      $('.up').click(function(){
+        $('.album-list').animate({scrollTop : 0},800);
+        $('.up').addClass('off');
+        $('.down').removeClass('off');
+        return false;
+      });
+
+      $('.down').click(function(){
+        $('.album-list').animate({scrollTop: $('.album-list').height()}, 1500);
+        $('.up').removeClass('off');
+        $('.down').addClass('off');
+        return false;
+      });
+
+      $('.left').click(function(){
+        $('.thumbnail-list').animate({scrollLeft : 0},800);
+        $('.left').addClass('off');
+        $('.right').removeClass('off');
+        return false;
+      });
+
+      $('.right').click(function(){
+        $('.thumbnail-list').animate({scrollLeft: $('.thumbnail-list').height()}, 800);
+        $('.left').removeClass('off');
+        $('.right').addClass('off');
+        return false;
+      });
+
+      if ($('.album-list').scrollTop() == 0) {
+
+        $('.left').addClass('off');
+        $('.down').removeClass('off');
+      }
+
+    </script>
+  </body>
+</html>
